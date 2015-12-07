@@ -16,6 +16,11 @@ limitations under the License.
 
 import argparse
 import logging
+import os
+from shutil import copy
+import subprocess
+
+from git import Repo
 
 LOG = logging.getLogger(__name__)
 
@@ -82,5 +87,69 @@ class ArgumentParser(argparse.ArgumentParser):
             action=LibvirtTypeAction)
 
 
+def clone_devstack():
+    Repo.clone_from('https://github.com/openstack-dev/devstack', '/tmp/')
+
+
+def create_stack_user():
+    subprocess.call(['/tmp/devstack/tools/create-stack-user.sh'])
+
+
+def build_localrc(localrc=None, virt_driver=None,
+                  backend=None, libvirt_type=None):
+    if localrc is not None:
+        copy(localrc, '/tmp/devstack/')
+
+    default_localrc = """
+        DEST=/opt/stack/new
+        DATA_DIR=/opt/stack/data
+        MYSQL_PASSWORD=password
+        DATABASE_PASSWORD=password
+        RABBIT_PASSWORD=password
+        ADMIN_PASSWORD=password
+        SERVICE_PASSWORD=password
+        SERVICE_TOKEN=111222333444
+        SWIFT_HASH=1234123412341234
+        ROOTSLEEP=0
+        ENABLED_SERVICES=c-api,c-bak,c-sch,c-vol,ceilometer-acentral,ceilometer-acompute,ceilometer-alarm-evaluator,ceilometer-alarm-notifier,ceilometer-anotification,ceilometer-api,ceilometer-collector,cinder,dstat,g-api,g-reg,horizon,key,mysql,n-api,n-cond,n-cpu,n-crt,n-net,n-obj,n-sch,rabbit,s-account,s-container,s-object,s-proxy,tempest
+        # Screen console logs will capture service logs.
+        SCREEN_LOGDIR=/opt/stack/new/screen-logs
+        LOGFILE=/opt/stack/new/devstacklog.txt
+        VERBOSE=True
+        FIXED_RANGE=10.1.0.0/20
+        FLOATING_RANGE=172.24.5.0/24
+        PUBLIC_NETWORK_GATEWAY=172.24.5.1
+        FIXED_NETWORK_SIZE=4096
+        SWIFT_REPLICAS=1
+        LOG_COLOR=False​
+    """
+
+    if virt_driver is not None:
+        default_localrc = "{0}\nVIRT_DRIVER={1}".format(
+            default_localrc, virt_driver)
+
+    if backend is not None:
+        default_localrc = "{0}\NOVA_BACKEND={1}".format(
+            default_localrc, backend)
+
+    if libvirt_type is not None:
+        default_localrc = "{0}\LIBVIRT_TYPE={1}".format(
+            default_localrc, libvirt_type)
+
+    with open('/tmp/devstack/localrc', 'w') as outfile:
+        outfile.write(default_localrc)
+
+
+def create_stack():
+    subprocess.call(['chmod +755 /tmp/devstack/stack.sh'])
+    subprocess.call(['sudo -H -u stack /tmp/devstack/stack.sh'])
+
+
 def entry_point():
-    pass
+    cl_args = ArgumentParser().parse_args()
+    clone_devstack()
+    create_stack_user()
+    build_localrc(
+        localrc=cl_args.localrc, virt_driver=cl_args.virt_driver,
+        backend=cl_args.backend, libvirt_type=cl_args.libvirt_type)
+    create_stack()

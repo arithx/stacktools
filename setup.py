@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='stacktools',
@@ -23,7 +23,8 @@ setup(
     author='Stephen Lowrie',
     author_email='stephen.lowrie@rackspace.com',
     url='https://github.com/arithx/stacktools',
-    install_requires=['six'],
+    packages=find_packages(exclude=('tests*', 'docs')),
+    install_requires=open('requirements.txt').read(),
     license=open('LICENSE').read(),
     classifiers=(
         'Development Status :: 4 - Beta',
@@ -36,8 +37,8 @@ setup(
     ),
     entry_points={
         'console_scripts':
-        ['devstack-deploy = stacktools.devstack:entry_point',
-         'tempest-deploy = stacktools.tempest:entry_point',
-         'tempest-run = stacktools.tempest:run_entry_point',
-         'cafe-deploy = stacktools.cafe:entry_point',
-         'cafe-run = stacktools.cafe:run_entry_point']})
+        ['devstack-deploy = stacktools.devstack:entry_point']})#,
+         #'tempest-deploy = stacktools.tempest:entry_point',
+         #'tempest-run = stacktools.tempest:run_entry_point',
+         #'cafe-deploy = stacktools.cafe:entry_point',
+         #'cafe-run = stacktools.cafe:run_entry_point']})
