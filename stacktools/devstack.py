@@ -100,6 +100,7 @@ def build_localrc(localrc=None, virt_driver=None,
                   backend=None, libvirt_type=None):
     if localrc is not None:
         copy(localrc, '/tmp/devstack/')
+        return
 
     default_localrc = """
         DEST=/opt/stack/new
