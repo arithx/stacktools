@@ -16,7 +16,6 @@ limitations under the License.
 
 import argparse
 import logging
-import os
 from shutil import copy
 import subprocess
 import textwrap

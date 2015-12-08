@@ -37,8 +37,8 @@ setup(
     ),
     entry_points={
         'console_scripts':
-        ['devstack-deploy = stacktools.devstack:entry_point']})#,
-         #'tempest-deploy = stacktools.tempest:entry_point',
-         #'tempest-run = stacktools.tempest:run_entry_point',
+        ['devstack-deploy = stacktools.devstack:entry_point',
+         'tempest-deploy = stacktools.tempest:entry_point',
+         'tempest-run = stacktools.tempest:run_entry_point']})#,
          #'cafe-deploy = stacktools.cafe:entry_point',
          #'cafe-run = stacktools.cafe:run_entry_point']})
