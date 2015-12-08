@@ -22,6 +22,8 @@ import textwrap
 
 from git import Repo
 
+from stacktools.common import demote, get_stack_user_info
+
 LOG = logging.getLogger(__name__)
 
 
@@ -145,7 +147,8 @@ def build_localrc(localrc=None, virt_driver=None,
 def create_stack():
     subprocess.call(['chown', 'stack:stack', '/tmp/devstack', '-R'])
     subprocess.call(['chmod', '+755', '/tmp/devstack/stack.sh'])
-    subprocess.call(['sudo', '-H', '-u', 'stack', '/tmp/devstack/stack.sh'])
+    uid, gid = get_stack_user_info()
+    subprocess.call(['/tmp/devstack/stack.sh'], preexec_fn=demote(uid, gid))
 
 
 def entry_point():

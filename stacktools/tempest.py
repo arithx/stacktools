@@ -17,9 +17,8 @@ limitations under the License.
 import argparse
 import logging
 import subprocess
-from pwd import getpwnam
 
-from stacktools.common import demote
+from stacktools.common import demote, get_stack_user_info
 
 LOG = logging.getLogger(__name__)
 
@@ -61,11 +60,6 @@ class RunArgumentParser(argparse.ArgumentParser):
         self.add_argument(
             "-c", "--concurrency", default=None, metavar="<concurrency>",
             help="Enables concurrency and specifies worker count", type=int)
-
-
-def get_stack_user_info():
-    user_info = getpwnam('stack')
-    return (user_info.pw_uid, user_info.pw_gid)
 
 
 def initialize_tempest(path, uid, gid):
