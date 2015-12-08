@@ -19,6 +19,7 @@ import logging
 import os
 from shutil import copy
 import subprocess
+import textwrap
 
 from git import Repo
 
@@ -139,7 +140,7 @@ def build_localrc(localrc=None, virt_driver=None,
             default_localrc, libvirt_type)
 
     with open('/tmp/devstack/localrc', 'w') as outfile:
-        outfile.write(default_localrc)
+        outfile.write(textwrap.dedent(default_localrc))
 
 
 def create_stack():
