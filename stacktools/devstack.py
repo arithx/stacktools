@@ -129,11 +129,11 @@ def build_localrc(localrc=None, virt_driver=None,
             default_localrc, virt_driver)
 
     if backend is not None:
-        default_localrc = "{0}\NOVA_BACKEND={1}".format(
+        default_localrc = "{0}\nNOVA_BACKEND={1}".format(
             default_localrc, backend)
 
     if libvirt_type is not None:
-        default_localrc = "{0}\LIBVIRT_TYPE={1}".format(
+        default_localrc = "{0}\nLIBVIRT_TYPE={1}".format(
             default_localrc, libvirt_type)
 
     with open('/tmp/devstack/localrc', 'w') as outfile:
