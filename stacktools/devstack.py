@@ -88,7 +88,8 @@ class ArgumentParser(argparse.ArgumentParser):
 
 
 def clone_devstack():
-    Repo.clone_from('https://github.com/openstack-dev/devstack', '/tmp/')
+    Repo.clone_from(
+        'https://github.com/openstack-dev/devstack', '/tmp/devstack/')
 
 
 def create_stack_user():
