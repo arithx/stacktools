@@ -142,6 +142,7 @@ def build_localrc(localrc=None, virt_driver=None,
 
 
 def create_stack():
+    subprocess.call(['chown', 'stack:stack', '/tmp/devstack', '-R'])
     subprocess.call(['chmod', '+755', '/tmp/devstack/stack.sh'])
     subprocess.call(['sudo', '-H', '-u', 'stack', '/tmp/devstack/stack.sh'])
 
