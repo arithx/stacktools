@@ -19,7 +19,7 @@ from setuptools import setup, find_packages
 setup(
     name='stacktools',
     version='0.0.1',
-    description='Python tool for creating and testing OpenStack.',
+    description='Python tool for creating and testing OpenStack environments.',
     author='Stephen Lowrie',
     author_email='stephen.lowrie@rackspace.com',
     url='https://github.com/arithx/stacktools',
