@@ -1,4 +1,5 @@
-# stacktools
+stacktools
+==========
 
 Python tool for creating and testing OpenStack environments.
 
@@ -26,4 +27,3 @@ Commands
 ::
 
     tempest-run [-r/--regex] [-c/--concurrency]
-
