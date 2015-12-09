@@ -63,7 +63,8 @@ class RunArgumentParser(argparse.ArgumentParser):
 
 
 def initialize_tempest(path, uid, gid):
-    subprocess.call(["testr", "init"], cwd=path, preexec_fn=demote(uid, gid))
+    subprocess.call(["testr", "init"], cwd=path, preexec_fn=demote(
+        *get_stack_user_info()))
 
 
 def build_run_options(regex, concurrency=None):
@@ -86,27 +87,25 @@ def build_trace_options():
     command.append("-f")
 
 
-def run_piped_commands(cmd_a, cmd_b, uid, gid):
+def run_piped_commands(cmd_a, cmd_b):
     proc_a = subprocess.Popen(
         cmd_a, stdout=subprocess.PIPE, cwd="/opt/stack/new/tempest",
-        preexec_fn=demote(uid, gid))
+        preexec_fn=demote(*get_stack_user_info()))
     proc_b = subprocess.Popen(
         cmd_b, stdin=proc_a.stdout, stdout=subprocess.PIPE,
-        cwd="/opt/stack/new/tempest", preexec_fn=demote(uid, gid))
+        cwd="/opt/stack/new/tempest", preexec_fn=demote(*get_stack_user_info()))
     proc_a.stdout.close()
     return proc_b.communicate()[0]
 
 
 def entry_point():
     cl_args = DeployArgumentParser().parse_args()
-    uid, gid = get_stack_user_info()
-    initialize_tempest(cl_args.path, uid, gid)
+    initialize_tempest(cl_args.path)
 
 
 def run_entry_point():
     cl_args = RunArgumentParser().parse_args()
-    uid, gid = get_stack_user_info()
     run_options = build_run_options(
         regex=cl_args.regex, concurrency=cl_args.concurrency)
     trace_options = build_trace_options()
-    run_piped_commands(run_options, trace_options, uid, gid)
+    run_piped_commands(run_options, trace_options)

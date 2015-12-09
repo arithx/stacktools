@@ -147,8 +147,8 @@ def build_localrc(localrc=None, virt_driver=None,
 def create_stack():
     subprocess.call(['chown', 'stack:stack', '/tmp/devstack', '-R'])
     subprocess.call(['chmod', '+755', '/tmp/devstack/stack.sh'])
-    uid, gid = get_stack_user_info()
-    subprocess.call(['/tmp/devstack/stack.sh'], preexec_fn=demote(uid, gid))
+    subprocess.call(['/tmp/devstack/stack.sh'], preexec_fn=demote(
+        *get_stack_user_info()))
 
 
 def entry_point():

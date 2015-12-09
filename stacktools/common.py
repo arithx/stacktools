@@ -12,6 +12,6 @@ def demote(user_uid, user_gid):
     return set_ids
 
 
-def get_stack_user_info():
-	user_info = getpwnam('stack')
+def get_stack_user_info(user="stack"):
+	user_info = getpwnam(user)
 	return (user_info.pw_uid, user_info.pw_gid)
